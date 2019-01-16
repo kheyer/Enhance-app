@@ -8,7 +8,6 @@ from fastai import *
 from fastai.vision import *
 import base64
 import pdb
-from utils import *
 
 model_file_url = 'https://www.dropbox.com/s/vixrjz68hnfvlqx/obj2.pth?raw=1'
 model_file_name = 'model'
@@ -19,6 +18,19 @@ path = Path(__file__).parent
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
+
+class FeatureLoss_Wass(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def make_features(self, x, clone=False):
+        return []
+
+    def forward(self, input, target):
+
+        return target.mean()
+
+    def __del__(self): self.hooks.remove()
 
 async def download_file(url, dest):
     if dest.exists(): return
@@ -35,7 +47,8 @@ async def setup_learner():
         .normalize(imagenet_stats, do_y=True))
     data_bunch.c = 3
     arch = models.resnet34
-    feat_loss = FeatureLoss_Wass(vgg_m, blocks[2:5], [5,15,2], [3, 0.7, 0.01])
+    #feat_loss = FeatureLoss_Wass(vgg_m, blocks[2:5], [5,15,2], [3, 0.7, 0.01])
+    feat_loss = FeatureLoss_Wass()
 
     learn = unet_learner(data_bunch, arch, wd=1e-3, loss_func=feat_loss, callback_fns=LossMetrics,
                      blur=True, norm_type=NormType.Weight)
@@ -62,7 +75,7 @@ async def upload(request):
 
     data_bunch = (ImageImageList.from_folder(path).random_split_by_pct(0.1, seed=42)
           .label_from_func(lambda x: 0)
-          .transform(get_transforms(), size=(y*2,z*2), tfm_y=True)
+          .transform(get_transforms(do_flip=False), size=(y*2,z*2), tfm_y=True)
           .databunch(bs=2).normalize(imagenet_stats, do_y=True))
 
     data_bunch.c = 3
@@ -72,7 +85,7 @@ async def upload(request):
     _,img_hr,losses = learn.predict(img)
     im = Image(img_hr.clamp(0,1))
     im.save(IMG_FILE_SRC)
-
+    pdb.set_trace()
     result_html1 = path/'static'/'result1.html'
     result_html2 = path/'static'/'result2.html'
     
