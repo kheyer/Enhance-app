@@ -1,0 +1,7 @@
+numpy==1.16.0rc1
+fastai
+starlette
+uvicorn
+python-multipart
+aiofiles
+aiohttp
