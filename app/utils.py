@@ -5,7 +5,7 @@ from fastai.callbacks import *
 
 from torchvision.models import vgg16_bn
 
-vgg_m = vgg16_bn(True).features.cuda().eval()
+vgg_m = vgg16_bn(True).features.eval()
 requires_grad(vgg_m, False)
 
 blocks = [i-1 for i,o in enumerate(children(vgg_m)) if isinstance(o,nn.MaxPool2d)]
