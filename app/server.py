@@ -51,7 +51,7 @@ async def setup_learner():
     #feat_loss = FeatureLoss_Wass(vgg_m, blocks[2:5], [5,15,2], [3, 0.7, 0.01])
     feat_loss = FeatureLoss_Wass()
 
-    learn = unet_learner(data_bunch, arch, wd=1e-3, loss_func=feat_loss, callback_fns=LossMetrics,
+    learn = unet_learner(data_bunch, arch, pretrained=False, wd=1e-3, loss_func=feat_loss, callback_fns=LossMetrics,
                      blur=True, norm_type=NormType.Weight)
 
     learn.load(model_file_name)
