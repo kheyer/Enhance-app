@@ -1,3 +1,1 @@
-place holder READEME.md for models directory
-
-Ideally after running python server.py or python server.py serve first time, you will have a model.pth file in this directory. 
+Weights for the model used can be downloaded [here](https://www.dropbox.com/s/vixrjz68hnfvlqx/obj2.pth?raw=1)
