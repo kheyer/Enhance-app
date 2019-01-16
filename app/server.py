@@ -6,6 +6,7 @@ import uvicorn, aiohttp, asyncio
 from io import BytesIO
 from fastai import *
 from fastai.vision import *
+from fastai.callbacks import *
 import base64
 import pdb
 
