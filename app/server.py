@@ -27,12 +27,6 @@ async def download_file(url, dest):
             data = await response.read()
             with open(dest, 'wb') as f: f.write(data)
 
-# async def setup_learner():
-#     await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
-#     data_bunch = ImageDataBunch.single_from_classes(path, classes, tfms=get_transforms(), size=150).normalize(imagenet_stats)
-#     learn = create_cnn(data_bunch, models.resnet34, pretrained=False)
-#     learn.load(model_file_name)
-#     return learn
 
 async def setup_learner():
     await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
@@ -61,20 +55,10 @@ IMG_FILE_SRC = path/'static'/'enhanced_image.png'
 async def upload(request):
     data = await request.form()
     img_bytes = await (data["img"].read())
-    #pdb.set_trace()
-    #scale = await (data["Scale Factor"].read())
-    #img = open_image(BytesIO(img_bytes))
     bytes = base64.b64decode(img_bytes)
-    #return predict_from_bytes(img)
 
-    #def predict_from_bytes(img):
     img = open_image(BytesIO(bytes))
-    #img.save(path/'static'/'test.png')
     x, y, z = img.data.shape
-    # data_bunch = (ImageImageList.from_folder(path/'static'/'imgs').random_split_by_pct(0.1, seed=42)
-    #       .label_from_func(lambda x: path/'static'/'imgs'/x.name)
-    #       .transform(get_transforms(), size=(y*2,z*2), tfm_y=True)
-    #       .databunch(bs=2).normalize(imagenet_stats, do_y=True))
 
     data_bunch = (ImageImageList.from_folder(path).random_split_by_pct(0.1, seed=42)
           .label_from_func(lambda x: 0)
@@ -84,18 +68,11 @@ async def upload(request):
     data_bunch.c = 3
 
     learn.data = data_bunch
-    #learn.load(model_file_name)
-    #pdb.set_trace()
+
     _,img_hr,losses = learn.predict(img)
-    #pdb.set_trace()
     im = Image(img_hr.clamp(0,1))
     im.save(IMG_FILE_SRC)
-    # x = image2np(im.data*255).astype(np.uint8)
-    # im_pil = PIL.Image.fromarray(x)
-    # im_pil.save(IMG_FILE_SRC)
-    #img.save(path/'static'/'test.png')
 
-    #predictions = sorted(zip(classes, map(float, losses)), key=lambda p: p[1], reverse=True)
     result_html1 = path/'static'/'result1.html'
     result_html2 = path/'static'/'result2.html'
     
