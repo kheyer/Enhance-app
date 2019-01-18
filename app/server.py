@@ -68,7 +68,8 @@ async def upload(request):
     data = await request.form()
     print(data.keys())
     print([type(data[k]) for k in data.keys()])
-    img_bytes = await (data["img"].read())
+    img_bytes = await (data["file"].read())
+    print(type(img_bytes))
     bytes = base64.b64decode(img_bytes)
 
     img = open_image(BytesIO(bytes))
