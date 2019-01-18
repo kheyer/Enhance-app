@@ -6,7 +6,6 @@ import uvicorn, aiohttp, asyncio
 from io import BytesIO
 from fastai import *
 from fastai.vision import *
-from fastai.callbacks import *
 import base64
 import pdb
 
@@ -48,10 +47,9 @@ async def setup_learner():
         .normalize(imagenet_stats, do_y=True))
     data_bunch.c = 3
     arch = models.resnet34
-    #feat_loss = FeatureLoss_Wass(vgg_m, blocks[2:5], [5,15,2], [3, 0.7, 0.01])
     feat_loss = FeatureLoss_Wass()
 
-    learn = unet_learner(data_bunch, arch, pretrained=False, wd=1e-3, loss_func=feat_loss, callback_fns=LossMetrics,
+    learn = unet_learner(data_bunch, arch, pretrained=False, wd=1e-3, loss_func=feat_loss,
                      blur=True, norm_type=NormType.Weight)
 
     learn.load(model_file_name)
@@ -68,6 +66,8 @@ IMG_FILE_SRC = path/'static'/'enhanced_image.png'
 @app.route("/upload", methods=["POST"])
 async def upload(request):
     data = await request.form()
+    print(data.keys())
+    print([type(data[k]) for k in data.keys()])
     img_bytes = await (data["img"].read())
     bytes = base64.b64decode(img_bytes)
 
@@ -90,7 +90,7 @@ async def upload(request):
     result_html1 = path/'static'/'result1.html'
     result_html2 = path/'static'/'result2.html'
     
-    result_html = str(result_html1.open().read() + result_html2.open().read())
+    result_html = str(result_html1.open().read() )#+ result_html2.open().read())
     return HTMLResponse(result_html)
 
 @app.route("/")
