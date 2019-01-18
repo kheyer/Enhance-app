@@ -86,7 +86,7 @@ async def upload(request):
     _,img_hr,losses = learn.predict(img)
     im = Image(img_hr.clamp(0,1))
     im.save(IMG_FILE_SRC)
-    pdb.set_trace()
+    #pdb.set_trace()
     result_html1 = path/'static'/'result1.html'
     result_html2 = path/'static'/'result2.html'
     
