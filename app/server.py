@@ -75,7 +75,7 @@ async def upload(request):
     #img = open_image(BytesIO(bytes))
     img = open_image(BytesIO(img_bytes))
     x, y, z = img.data.shape
-    pdb.set_trace()
+    #pdb.set_trace()
     data_bunch = (ImageImageList.from_folder(path).random_split_by_pct(0.1, seed=42)
           .label_from_func(lambda x: 0)
           .transform(get_transforms(do_flip=False), size=(y*2,z*2), tfm_y=True)
