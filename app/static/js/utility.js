@@ -16,38 +16,18 @@ function fileChange(e) {
 
             var image = new Image();
             image.onload = function(imageEvent) {	
-                // var max_size = 420;
+                var max_size = 1000;
                 var w = image.width;
                 var h = image.height;
                 // console.log("width:",w, "height:", h);
-                // if (w > h) {
-                //     if (w > max_size) { h*=max_size/w; w=max_size; }
-                // } else     {  if (h > max_size) { w*=max_size/h; h=max_size; } }
+                if (x > max_size || h > max_size) {
+                    if (w > h) {
+                        if (w > max_size) { h*=max_size/w; w=max_size; }
+                    } else     {  if (h > max_size) { w*=max_size/h; h=max_size; } }}
                 // console.log("Updated width:",w, "Updated height:", h);
 
                 var canvas = document.createElement('canvas');
-                // // FORCEFUL to portrait mode only images
-                // if (w > h) {
-                //     // canvas.width = h;
-                //     // canvas.height = w;
-                //     canvas.width = w;
-                //     canvas.height = h;
-                //     var ctx = canvas.getContext('2d');
-                //     // move the rotation point to the center of the rect
-                //     // ctx.translate( h / 2, w / 2);
-                //     ctx.translate( w / 2, h / 2);
-                //     // Rotate Image
-                //     ctx.rotate(-90 * Math.PI / 180);
-                //     // ctx.drawImage(image, -h / 2, -w / 2, h, w);
-                //     ctx.drawImage(image, -w / 2, -h / 2, w, h);
-                // }
-                // else {
-                //     canvas.width = w;
-                //     canvas.height = h;
-                //     canvas.getContext('2d').drawImage(image, 0, 0, w, h);
-                // }
-                
-                //  NO FORCEFUL Just Use Default Image
+
                 canvas.width = w;
                 canvas.height = h;
                 canvas.getContext('2d').drawImage(image, 0, 0, w, h);
@@ -86,13 +66,6 @@ function fileChange(e) {
 }
 
 function adjustImageFileSize(imageDataURL) {
-    
-    // var base64String = imageDataURL.split(",")[1];
-    // console.log("base64", base64String.length);
-  
-    // //console.log("non blob", stringToBytesFaster(base64String).length);
-    // var nonBlob = stringToBytesFaster(base64String).length;
-    // console.log("non blob", nonBlob/1000000, "MB", "-----", nonBlob/1000, "KB");
   
     var file = dataURLtoBlob(imageDataURL);
     var size = file.size;

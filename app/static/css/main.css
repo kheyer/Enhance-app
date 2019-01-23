@@ -1,7 +1,3 @@
-
-
-
-
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
 
@@ -145,9 +141,6 @@ iframe {
 }
 
 
-
-
-
 /*//////////////////////////////////////////////////////////////////
 [ Contact ]*/
 
@@ -168,12 +161,6 @@ iframe {
   background: -o-linear-gradient(45deg, #0c2bdb, #2d2964);
   background: -moz-linear-gradient(45deg, #0c2bdb, #2d2964);
   background: linear-gradient(45deg, #0c2bdb, #2d2964);
-  /* background: #a64bf4;
-  background: -webkit-linear-gradient(45deg, #00dbde, #fc00ff);
-  background: -o-linear-gradient(45deg, #00dbde, #fc00ff);
-  background: -moz-linear-gradient(45deg, #00dbde, #fc00ff);
-  background: linear-gradient(45deg, #00dbde, #fc00ff); */
-  
 }
 
 .wrap-contact100 {
@@ -240,7 +227,15 @@ iframe {
 
 .label-input100 {
   font-family: Poppins-Regular;
-  font-size: 13px;
+  font-size: 14px;
+  color: #666666;
+  line-height: 1.5;
+  padding-left: 5px;
+}
+
+.label-input10 {
+  font-family: Poppins-Regular;
+  font-size: 12px;
   color: #666666;
   line-height: 1.5;
   padding-left: 5px;
@@ -341,11 +336,6 @@ textarea.input100 {
   background: -moz-linear-gradient(45deg, #0c2bdb, #2d2964);
   background: linear-gradient(45deg, #0c2bdb, #2d2964);
 
-  /* background: #a64bf4;
-  background: -webkit-linear-gradient(left, #00dbde, #fc00ff, #00dbde, #fc00ff);
-  background: -o-linear-gradient(left, #00dbde, #fc00ff, #00dbde, #fc00ff);
-  background: -moz-linear-gradient(left, #00dbde, #fc00ff, #00dbde, #fc00ff);
-  background: linear-gradient(left, #00dbde, #fc00ff, #00dbde, #fc00ff); */
   top: 0;
   left: -100%;
 
@@ -573,12 +563,6 @@ textarea.input100 {
   background: -o-linear-gradient(45deg, #0c2bdb, #2d2964);
   background: -moz-linear-gradient(45deg, #0c2bdb, #2d2964);
   background: linear-gradient(45deg, #0c2bdb, #2d2964);
-
-  /* background: #a64bf4;
-  background: -webkit-linear-gradient(right, #00dbde, #fc00ff);
-  background: -o-linear-gradient(right, #00dbde, #fc00ff);
-  background: -moz-linear-gradient(right, #00dbde, #fc00ff);
-  background: linear-gradient(right, #00dbde, #fc00ff); */
   color: white;
 }
 
@@ -589,12 +573,6 @@ textarea.input100 {
   background: -o-linear-gradient(45deg, #0c2bdb, #2d2964);
   background: -moz-linear-gradient(45deg, #0c2bdb, #2d2964);
   background: linear-gradient(45deg, #0c2bdb, #2d2964);
-
-  /* background: #a64bf4;
-  background: -webkit-linear-gradient(right, #00dbde, #fc00ff);
-  background: -o-linear-gradient(right, #00dbde, #fc00ff);
-  background: -moz-linear-gradient(right, #00dbde, #fc00ff);
-  background: linear-gradient(right, #00dbde, #fc00ff); */
   color: white;
 }
 
@@ -621,16 +599,18 @@ textarea.input100 {
   width: 90%;
 }
 
-/* input[type=file]{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 90%;
-} */
 
 #image-picked {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 90%;
+}
+
+.navbar {
+  background-color: transparent;
+  margin-top: 20px;
+  width: 100%;
+  font-family: 'Helvetica Neue';
+  font-weight: 800;
 }

@@ -4,24 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!--===============================================================================================-->
-<!--===============================================================================================-->
 	<link rel="icon" type="image/png" href="static/images/icons/favicon.ico"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="static/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="static/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" hrexf="static/vendor/select2/select2.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="static/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="static/css/util.css">
 	<link rel="stylesheet" type="text/css" href="static/css/main.css">
 <!--===============================================================================================-->
 </head>
@@ -32,19 +15,12 @@
 			<span class="contact100-form-title">Image Enhancer</span>
 			<form class="contact100-form validate-form" action="/upload" method="post" enctype="multipart/form-data">
 				<div class="wrap-input100 validate-input" data-validate = "Valid image file is required: jpg or png">
-					<span class="label-input100">Select Only One Image File</span>
+					<p class="label-input100">Select Only One Image File</p>
+					<p class="label-input10">Note output image limited to 800x800 pixels due to memory and compute constraints</p>
 					<input id="inp_file" type="file" name="file" >
 					<input id="inp_img" type="hidden" name="img" value="">
 					<span class="focus-input100"></span>
 				</div>
-
-				<!-- <div>
-					<select name="scale" id="scale">
-						<option selected disabled>Select Scale Factor</option>
-						<option value="2">2</option>
-						<option value="4">4</option>
-					</select>
-				</div> -->
 
 				<div>
 					<img id="image-picked" class="image-display">
@@ -61,8 +37,11 @@
 						</button>
 					</div>
 				</div>
-
 			</form>
+			<div
+				class="navbar">
+					<a href="https://github.com/kheyer/Enhance-app" target="_blank"><img src="static/images/github.png" target="_blank", height=42, width=42 /></a>
+			</div>
 		</div>
 	</div>
 <script src="static/js/utility.js"></script>

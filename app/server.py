@@ -22,15 +22,28 @@ app.mount('/static', StaticFiles(directory='app/static'))
 class FeatureLoss_Wass(nn.Module):
     def __init__(self):
         super().__init__()
-
     def make_features(self, x, clone=False):
         return []
-
     def forward(self, input, target):
-
         return target.mean()
-
     def __del__(self): self.hooks.remove()
+
+def round_up_to_even(f):
+    return math.ceil(f / 2.) * 2
+
+def get_resize(y, z, max_size):
+    if y*2 <= max_size and z*2 <= max_size:
+        y_new = y*2
+        z_new = z*2
+    else:
+        if y > z:
+            y_new = max_size
+            z_new = int(round_up_to_even(z * max_size / y))
+
+        else:
+            z_new = max_size
+            y_new = int(round_up_to_even(y * max_size / z))
+    return (y_new, z_new)
 
 async def download_file(url, dest):
     if dest.exists(): return
@@ -42,6 +55,7 @@ async def download_file(url, dest):
 
 async def setup_learner():
     await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
+    defaults.device = torch.device('cpu')
     data_bunch = (ImageDataBunch.single_from_classes(path, classes,
         tfms=get_transforms(max_zoom=2.), size=224, tfm_y=True)
         .normalize(imagenet_stats, do_y=True))
@@ -66,33 +80,26 @@ IMG_FILE_SRC = path/'static'/'enhanced_image.png'
 @app.route("/upload", methods=["POST"])
 async def upload(request):
     data = await request.form()
-    print(data.keys())
-    print([type(data[k]) for k in data.keys()])
     img_bytes = await (data["file"].read())
-    print(type(img_bytes))
-    #bytes = base64.b64decode(img_bytes)
-
-    #img = open_image(BytesIO(bytes))
     img = open_image(BytesIO(img_bytes))
     x, y, z = img.data.shape
-    #pdb.set_trace()
+
+    max_size = 800
+    y_new, z_new = get_resize(y, z, max_size)
+
     data_bunch = (ImageImageList.from_folder(path).random_split_by_pct(0.1, seed=42)
           .label_from_func(lambda x: 0)
-          .transform(get_transforms(do_flip=False), size=(y*2,z*2), tfm_y=True)
+          .transform(get_transforms(do_flip=False), size=(y_new,z_new), tfm_y=True)
           .databunch(bs=2).normalize(imagenet_stats, do_y=True))
 
     data_bunch.c = 3
-
     learn.data = data_bunch
-
     _,img_hr,losses = learn.predict(img)
     im = Image(img_hr.clamp(0,1))
     im.save(IMG_FILE_SRC)
-    #pdb.set_trace()
     result_html1 = path/'static'/'result1.html'
-    result_html2 = path/'static'/'result2.html'
     
-    result_html = str(result_html1.open().read() )#+ result_html2.open().read())
+    result_html = str(result_html1.open().read() )
     return HTMLResponse(result_html)
 
 @app.route("/")
@@ -101,4 +108,4 @@ def form(request):
     return HTMLResponse(index_html.open().read())
 
 if __name__ == "__main__":
-    if "serve" in sys.argv: uvicorn.run(app, host="0.0.0.0", port=5042)
+    if "serve" in sys.argv: uvicorn.run(app = app, host="0.0.0.0", port=8080)
