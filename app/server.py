@@ -84,7 +84,7 @@ async def upload(request):
     img = open_image(BytesIO(img_bytes))
     x, y, z = img.data.shape
 
-    max_size = 800
+    max_size = 1000
     y_new, z_new = get_resize(y, z, max_size)
 
     data_bunch = (ImageImageList.from_folder(path).random_split_by_pct(0.1, seed=42)

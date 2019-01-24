@@ -16,7 +16,7 @@ function fileChange(e) {
 
             var image = new Image();
             image.onload = function(imageEvent) {	
-                var max_size = 1000;
+                var max_size = 1200;
                 var w = image.width;
                 var h = image.height;
                 // console.log("width:",w, "height:", h);
@@ -35,14 +35,14 @@ function fileChange(e) {
                 if (file.type == "image/jpeg") {
                 var dataURL = canvas.toDataURL("image/jpeg", 0.80);
                 if (adjustImageFileSize(dataURL) > 1) {
-                    dataURL = canvas.toDataURL("image/jpeg", 0.50);
+                    dataURL = canvas.toDataURL("image/jpeg", 0.60);
                 }
 
                 }
                 else {
                     var dataURL = canvas.toDataURL("image/png", 0.80);
                     if (adjustImageFileSize(dataURL) > 1) {
-                        dataURL = canvas.toDataURL("image/png", 0.50);
+                        dataURL = canvas.toDataURL("image/png", 0.60);
                     }
                 }
                 el('image-picked').src = dataURL;
