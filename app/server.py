@@ -59,7 +59,7 @@ async def setup_learner():
     await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
     defaults.device = torch.device('cpu')
     data_bunch = (ImageDataBunch.single_from_classes(path, classes,
-        tfms=get_transforms(max_zoom=2.), size=224, tfm_y=True)
+        tfms=get_transforms(max_zoom=2.), size=224, tfm_y=True, no_check=True)
         .normalize(imagenet_stats, do_y=True))
     data_bunch.c = 3
     arch = models.resnet34
@@ -83,9 +83,6 @@ IMG_FILE_SRC = path/'static'/'enhanced_image.png'
 async def upload(request):
     data = await request.form()
     img_bytes = await (data["file"].read())
-
-    #bytes = base64.b64decode(img_bytes)
-    #img = open_image(BytesIO(bytes))
 
     img = open_image(BytesIO(img_bytes))
     x, y, z = img.data.shape
