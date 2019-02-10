@@ -3,11 +3,12 @@ from starlette.responses import HTMLResponse
 from starlette.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn, aiohttp, asyncio
-from io import BytesIO
+from io import BytesIO, StringIO
 from fastai import *
 from fastai.vision import *
 import base64
 import pdb
+from utils import *
 
 model_file_url = 'https://www.dropbox.com/s/vixrjz68hnfvlqx/obj2.pth?raw=1'
 model_file_name = 'model'
@@ -45,6 +46,7 @@ def get_resize(y, z, max_size):
             y_new = int(round_up_to_even(y * max_size / z))
     return (y_new, z_new)
 
+
 async def download_file(url, dest):
     if dest.exists(): return
     async with aiohttp.ClientSession() as session:
@@ -81,6 +83,10 @@ IMG_FILE_SRC = path/'static'/'enhanced_image.png'
 async def upload(request):
     data = await request.form()
     img_bytes = await (data["file"].read())
+
+    #bytes = base64.b64decode(img_bytes)
+    #img = open_image(BytesIO(bytes))
+
     img = open_image(BytesIO(img_bytes))
     x, y, z = img.data.shape
 
@@ -95,12 +101,26 @@ async def upload(request):
     data_bunch.c = 3
     learn.data = data_bunch
     _,img_hr,losses = learn.predict(img)
+
     im = Image(img_hr.clamp(0,1))
-    im.save(IMG_FILE_SRC)
-    result_html1 = path/'static'/'result1.html'
-    
-    result_html = str(result_html1.open().read() )
-    return HTMLResponse(result_html)
+
+    im_data = image2np(im.data*255).astype(np.uint8)
+
+    img_io = BytesIO()
+
+    PIL.Image.fromarray(im_data).save(img_io, 'PNG')
+
+    img_io.seek(0)
+
+    img_str = base64.b64encode(img_io.getvalue()).decode()
+
+    #im = Image(img_hr.clamp(0,1))
+    #im.save(IMG_FILE_SRC)
+    #result_html1 = path/'static'/'result1.html'
+    #result_html = str(result_html1.open().read())
+
+    html_out = result_html(img_str)
+    return HTMLResponse(html_out)
 
 @app.route("/")
 def form(request):
