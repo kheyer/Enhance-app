@@ -1,3 +1,5 @@
+from fastai import *
+from fastai.vision import *
 
 class FeatureLoss_Wass():
     def __init__(self):

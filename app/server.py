@@ -10,8 +10,8 @@ import base64
 import pdb
 from utils import *
 
-model_file_url = 'https://www.dropbox.com/s/vixrjz68hnfvlqx/obj2.pth?raw=1'
-model_file_name = 'model'
+export_file_url = 'https://www.dropbox.com/s/72n76fd23xvlvmb/export.pkl?dl=1'
+export_file_name = 'export.pkl'
 classes = ['a', 'b', 'c']
 
 path = Path(__file__).parent
@@ -19,7 +19,6 @@ path = Path(__file__).parent
 app = Starlette(template_directory='app/templates')
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
-app.debug = True
 
 async def download_file(url, dest):
     if dest.exists(): return
@@ -30,19 +29,9 @@ async def download_file(url, dest):
 
 
 async def setup_learner():
-    await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
+    await download_file(export_file_url, path/'models'/export_file_name)
     defaults.device = torch.device('cpu')
-    data_bunch = (ImageDataBunch.single_from_classes(path, classes,
-        ds_tfms=get_transforms(max_zoom=2.), size=224, tfm_y=True, no_check=True)
-        .normalize(imagenet_stats, do_y=True))
-    data_bunch.c = 3
-    arch = models.resnet34
-    feat_loss = FeatureLoss_Wass()
-
-    learn = unet_learner(data_bunch, arch, pretrained=False, wd=1e-3, loss_func=feat_loss,
-                     blur=True, norm_type=NormType.Weight)
-
-    learn.load(model_file_name)
+    learn = load_learner(path/'models', export_file_name)
     return learn
 
 loop = asyncio.get_event_loop()
