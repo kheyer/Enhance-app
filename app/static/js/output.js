@@ -13,6 +13,7 @@ blobAnchor.target = "_blank"
 var image_box = document.getElementById('myImage')
 var url2 = URL.createObjectURL(img_blob);
 image_box.src = url2
+document.getElementById('imageTab').href = url2
 
 
 function dataURLtoBlob(dataURL) {
