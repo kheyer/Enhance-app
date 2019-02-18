@@ -19,6 +19,7 @@ path = Path(__file__).parent
 app = Starlette(template_directory='app/templates')
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
+app.debug = True
 
 async def download_file(url, dest):
     if dest.exists(): return
@@ -32,7 +33,7 @@ async def setup_learner():
     await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
     defaults.device = torch.device('cpu')
     data_bunch = (ImageDataBunch.single_from_classes(path, classes,
-        tfms=get_transforms(max_zoom=2.), size=224, tfm_y=True, no_check=True)
+        ds_tfms=get_transforms(max_zoom=2.), size=224, tfm_y=True, no_check=True)
         .normalize(imagenet_stats, do_y=True))
     data_bunch.c = 3
     arch = models.resnet34
@@ -60,8 +61,7 @@ async def upload(request):
     max_size = 1000
     y_new, z_new = get_resize(y, z, max_size)
 
-    data_bunch = (ImageImageList.from_folder(path).random_split_by_pct(0.1, seed=42)
-          .label_from_func(lambda x: 0)
+    data_bunch = (ImageImageList.from_folder(path).no_split().label_from_func(lambda x: x)
           .transform(get_transforms(do_flip=False), size=(y_new,z_new), tfm_y=True)
           .databunch(bs=2, no_check=True).normalize(imagenet_stats, do_y=True))
 
