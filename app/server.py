@@ -8,43 +8,17 @@ from fastai import *
 from fastai.vision import *
 import base64
 import pdb
+from utils import *
 
 model_file_url = 'https://www.dropbox.com/s/vixrjz68hnfvlqx/obj2.pth?raw=1'
 model_file_name = 'model'
-classes = ['black', 'grizzly', 'teddys']
+classes = ['a', 'b', 'c']
 
 path = Path(__file__).parent
 
 app = Starlette(template_directory='app/templates')
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
-
-class FeatureLoss_Wass(nn.Module):
-    def __init__(self):
-        super().__init__()
-    def make_features(self, x, clone=False):
-        return []
-    def forward(self, input, target):
-        return target.mean()
-    def __del__(self): self.hooks.remove()
-
-def round_up_to_even(f):
-    return math.ceil(f / 2.) * 2
-
-def get_resize(y, z, max_size):
-    if y*2 <= max_size and z*2 <= max_size:
-        y_new = y*2
-        z_new = z*2
-    else:
-        if y > z:
-            y_new = max_size
-            z_new = int(round_up_to_even(z * max_size / y))
-
-        else:
-            z_new = max_size
-            y_new = int(round_up_to_even(y * max_size / z))
-    return (y_new, z_new)
-
 
 async def download_file(url, dest):
     if dest.exists(): return
@@ -74,9 +48,6 @@ loop = asyncio.get_event_loop()
 tasks = [asyncio.ensure_future(setup_learner())]
 learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
 loop.close()
-
-PREDICTION_FILE_SRC = path/'static'/'predictions.txt'
-IMG_FILE_SRC = path/'static'/'enhanced_image.png'
 
 @app.route("/upload", methods=["POST"])
 async def upload(request):
