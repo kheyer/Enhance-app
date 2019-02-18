@@ -8,7 +8,6 @@ from fastai import *
 from fastai.vision import *
 import base64
 import pdb
-from utils import *
 
 model_file_url = 'https://www.dropbox.com/s/vixrjz68hnfvlqx/obj2.pth?raw=1'
 model_file_name = 'model'
@@ -16,7 +15,7 @@ classes = ['black', 'grizzly', 'teddys']
 
 path = Path(__file__).parent
 
-app = Starlette()
+app = Starlette(template_directory='app/templates')
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
 
@@ -93,7 +92,7 @@ async def upload(request):
     data_bunch = (ImageImageList.from_folder(path).random_split_by_pct(0.1, seed=42)
           .label_from_func(lambda x: 0)
           .transform(get_transforms(do_flip=False), size=(y_new,z_new), tfm_y=True)
-          .databunch(bs=2).normalize(imagenet_stats, do_y=True))
+          .databunch(bs=2, no_check=True).normalize(imagenet_stats, do_y=True))
 
     data_bunch.c = 3
     learn.data = data_bunch
@@ -110,14 +109,12 @@ async def upload(request):
     img_io.seek(0)
 
     img_str = base64.b64encode(img_io.getvalue()).decode()
+    img_str = "data:image/png;base64," + img_str
 
-    #im = Image(img_hr.clamp(0,1))
-    #im.save(IMG_FILE_SRC)
-    #result_html1 = path/'static'/'result1.html'
-    #result_html = str(result_html1.open().read())
+    template = app.get_template('output.html')
+    content = template.render(b64val=img_str)
+    return HTMLResponse(content)
 
-    html_out = result_html(img_str)
-    return HTMLResponse(html_out)
 
 @app.route("/")
 def form(request):
@@ -125,4 +122,4 @@ def form(request):
     return HTMLResponse(index_html.open().read())
 
 if __name__ == "__main__":
-    if "serve" in sys.argv: uvicorn.run(app = app, host="0.0.0.0", port=8080)
+    if "serve" in sys.argv: uvicorn.run(app = app, host="0.0.0.0", port=7000)

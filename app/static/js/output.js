@@ -2,11 +2,7 @@ var el = x => document.getElementById(x);
 
 var img_enc = document.getElementById('img_b64');
 
-// console.log(img_enc);
-
 var img_blob = dataURLtoBlob(img_enc.value);
-
-// console.log(img_blob);
 
 var url = URL.createObjectURL(img_blob);
 var blobAnchor = document.getElementById('myButton');
@@ -17,42 +13,6 @@ blobAnchor.target = "_blank"
 var image_box = document.getElementById('myImage')
 var url2 = URL.createObjectURL(img_blob);
 image_box.src = url2
-
-// document.getElementById('myButton').href = img_blob;
-// document.getElementById('myButton').download = 'test.png';
-
-// document.getElementById('myButton').onclick = function(event){
-
-//     url = window.URL.createObjectURL(img_blob);
-//     this.href = url;
-//     this.target = '_blank';
-// }
-
-
-
-// var url = URL.createObjectURL(blob);
-
-// var blobAnchor = document.getElementById('blob');
-// var dataURIAnchor = document.getElementById('dataURI');
-
-// var dataURI_DL = function() {
-
-//     var url = URL.createObjectURL(img_blob);
-//     var blobAnchor = document.getElementById('blob');
-//     var dataURIAnchor = document.getElementById('dataURI');
-//     blobAnchor.download = dataURIAnchor.download = 'test.png';
-//     blobAnchor.href = url;
-//     dataURIAnchor.href = dataURI;
-//     stat_.textContent = '';
-  
-//     blobAnchor.onclick = function() {
-//       requestAnimationFrame(function() {
-//         URL.revokeObjectURL(url);
-//       })
-//     };
-
-
-// }
 
 
 function dataURLtoBlob(dataURL) {
