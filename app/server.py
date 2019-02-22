@@ -2,6 +2,7 @@ from starlette.applications import Starlette
 from starlette.responses import HTMLResponse
 from starlette.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
+from starlette.templating import Jinja2Templates
 import uvicorn, aiohttp, asyncio
 from io import BytesIO, StringIO
 from fastai import *
@@ -16,7 +17,8 @@ classes = ['a', 'b', 'c']
 
 path = Path(__file__).parent
 
-app = Starlette(template_directory='app/templates')
+templates = Jinja2Templates(directory='app/templates')
+app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
 
@@ -71,9 +73,7 @@ async def upload(request):
     img_str = base64.b64encode(img_io.getvalue()).decode()
     img_str = "data:image/png;base64," + img_str
 
-    template = app.get_template('output.html')
-    content = template.render(b64val=img_str)
-    return HTMLResponse(content)
+    return templates.TemplateResponse('output.html', {'request' : request, 'b64val' : img_str})
 
 
 @app.route("/")
