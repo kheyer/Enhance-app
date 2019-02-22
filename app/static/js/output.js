@@ -33,7 +33,6 @@ $('body').on('click', '#submit_btn', function(event) {
 });
 
 
-
 function dataURLtoBlob(dataURL) {
     // Decode the dataURL
     var imageType = dataURL.split(',')[0];     
@@ -44,7 +43,6 @@ function dataURLtoBlob(dataURL) {
         array.push(binary.charCodeAt(i));
     }
     // Return our Blob object
-    // console.log("imageType", imageType);
 
     if (imageType.indexOf("jpeg") >=0) {
         return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
