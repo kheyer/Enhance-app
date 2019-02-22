@@ -2,18 +2,36 @@ var el = x => document.getElementById(x);
 
 var img_enc = document.getElementById('img_b64');
 
-var img_blob = dataURLtoBlob(img_enc.value);
-
+var img_blob = dataURLtoBlob(img_enc.value); // create blob
+var image_box = document.getElementById('myImage');
 var url = URL.createObjectURL(img_blob);
-var blobAnchor = document.getElementById('myButton');
-blobAnchor.download = 'enhanced_image.png';
-blobAnchor.href = url;
-blobAnchor.target = "_blank"
+image_box.src = url
 
-var image_box = document.getElementById('myImage')
-var url2 = URL.createObjectURL(img_blob);
-image_box.src = url2
-document.getElementById('imageTab').href = url2
+$('body').on('click', '#myImage', function(event) {
+    var link = document.createElement('a');
+    var url = URL.createObjectURL(img_blob);
+    // Add the element to the DOM
+    link.setAttribute("type", "hidden");
+    link.href = url;
+    link.target = "_blank"; // set to open in new tab
+    document.body.appendChild(link); // append element
+    link.click(); // activate
+    link.remove(); // remove
+});
+
+
+$('body').on('click', '#submit_btn', function(event) {
+    var link = document.createElement('a');
+    var url = URL.createObjectURL(img_blob);
+    // Add the element to the DOM
+    link.setAttribute("type", "hidden");
+    link.download = 'enhanced_image.png'; // set to download
+    link.href = url;
+    document.body.appendChild(link); // append element
+    link.click(); // activate
+    link.remove(); // remove
+});
+
 
 
 function dataURLtoBlob(dataURL) {
