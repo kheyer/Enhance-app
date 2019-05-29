@@ -11,7 +11,7 @@ import base64
 import pdb
 from utils import *
 
-export_file_url = 'https://www.dropbox.com/s/72n76fd23xvlvmb/export.pkl?dl=1'
+exoirt_file_url = 'https://www.dropbox.com/s/xlwwdf5zmz3ehvs/export.pkl?dl=0'
 export_file_name = 'export.pkl'
 classes = ['a', 'b', 'c']
 
@@ -52,7 +52,7 @@ async def upload(request):
     max_size = 1000
     y_new, z_new = get_resize(y, z, max_size)
 
-    data_bunch = (ImageImageList.from_folder(path).no_split().label_from_func(lambda x: x)
+    data_bunch = (ImageImageList.from_folder(path).split_none().label_from_func(lambda x: x)
           .transform(get_transforms(do_flip=False), size=(y_new,z_new), tfm_y=True)
           .databunch(bs=2, no_check=True).normalize(imagenet_stats, do_y=True))
 

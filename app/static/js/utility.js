@@ -19,12 +19,10 @@ function fileChange(e) {
                 var max_size = 1200;
                 var w = image.width;
                 var h = image.height;
-                // console.log("width:",w, "height:", h);
                 if (x > max_size || h > max_size) {
                     if (w > h) {
                         if (w > max_size) { h*=max_size/w; w=max_size; }
                     } else     {  if (h > max_size) { w*=max_size/h; h=max_size; } }}
-                // console.log("Updated width:",w, "Updated height:", h);
 
                 var canvas = document.createElement('canvas');
 
