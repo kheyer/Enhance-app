@@ -11,7 +11,7 @@ import base64
 import pdb
 from utils import *
 
-exoirt_file_url = 'https://www.dropbox.com/s/xlwwdf5zmz3ehvs/export.pkl?dl=0'
+export_file_url = 'https://www.dropbox.com/s/xlwwdf5zmz3ehvs/export.pkl?dl=0'
 export_file_name = 'export.pkl'
 classes = ['a', 'b', 'c']
 
