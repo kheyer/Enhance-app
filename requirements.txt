@@ -1,4 +1,4 @@
-numpy==1.16.0rc1
+numpy==1.22.0
 fastai
 starlette
 uvicorn
